@@ -5,6 +5,8 @@ import MoviesList from "./MoviesList";
 import MoviesWatched from './MoviesWatched';
 import Results from "./Results";
 import SearchInput from "./SearchInput";
+import Box from './Box';
+import Logo from './Logo';
 
 const tempMovieData = [
     {
@@ -58,18 +60,11 @@ export default function App() {
     return (
         <div className="usePopcorn-app">
             <NavigationBar>
-                <div className="first">
-                    <img src="usePopcorn.svg" alt="usePopcorn - logo"/>
-                    <h4>usePopcorn</h4>
-                </div>
-                <div className="second">
-                    <SearchInput />
-                </div>
-                <div className="third">
-                    <Results movies={tempMovieData}/>
-                </div>
+                <Logo />
+                <SearchInput />
+                <Results movies={tempMovieData}/>
             </NavigationBar>
-            <div className="main">
+            <Box>
                 <BoxColumn>
                     <MoviesList movies={tempMovieData}/>
                 </BoxColumn>
@@ -77,7 +72,7 @@ export default function App() {
                     <MoviesWatched movies={tempWatchedData}/>
                     <MoviesList movies={tempWatchedData}/>
                 </BoxColumn>
-            </div>
+            </Box>
         </div>
     )
 }
