@@ -1,6 +1,6 @@
 export default function Results({movies}) {
 
-    const totalMoview = movies.length;
+    const totalMoview = movies ? movies.length : 0;
 
     return (
         <div className="third">
