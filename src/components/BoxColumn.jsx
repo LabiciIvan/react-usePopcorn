@@ -1,4 +1,5 @@
 import { useState } from "react";
+import Button from "./Button";
 
 export default function BoxColumn({children}) {
     const [open, setOpen] = useState(true);
@@ -6,7 +7,11 @@ export default function BoxColumn({children}) {
     return (
         <div className={`column ${open ? "expanded" : "collapsed"}`}>
             <div className="column-controller">
-                <span onClick={() => setOpen(prev => !prev)}>{open ? '-' : '+'}</span>
+                <Button
+                 circle={true}
+                 content={open ? '-' : '+'}
+                 onHandleClick={() => setOpen(prev => !prev)}
+                />
             </div>
             { open && children }
         </div>
