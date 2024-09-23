@@ -1,4 +1,4 @@
-export default function Movie({movie, onSetSelectedId}) {
+export default function Movie({movie, onSetSelectedId = () => {console.log('Calling Movie prop funcion')}}) {
     return (
         <li className="movie-item" onClick={() => onSetSelectedId(prev => movie.imdbID)}>
             <img src={movie.Poster} alt="Movie Image"/>

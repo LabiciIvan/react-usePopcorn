@@ -9,6 +9,7 @@ import SearchInput from "./SearchInput";
 import Box from './Box';
 import Logo from './Logo';
 import MovieDetails from './MovieDetails';
+import StatusMessage from './StatusMessage';
 
 const API_KEY = atob('OGY1NDAzOA==');
 
@@ -21,14 +22,6 @@ export default function App() {
     const [searchInput, setSearchInput] = useState("");
 
     const [selectedId, setSelectedId] = useState(null);
-    const [selectedMovie, setSelectedMovie] = useState(null);
-
-
-    function StatusMessage({message}) {
-        return (
-            <div className='loading'>{message}</div>
-        )
-    }
 
     async function fetchMovies() {
 
@@ -59,40 +52,21 @@ export default function App() {
         }
     }
 
-    async function fetchMovieById() {
-        try {
-            if (selectedMovie && (selectedId === selectedMovie.imdbID)) return;
-
-            const response = await fetch(`https://www.omdbapi.com/?apikey=${API_KEY}&i=${selectedId}`);
-
-            const movie = await response.json();
-
-            if (movie.Response === "False") {
-                setSelectedMovie(null);
-                return;
-            }
-
-            setSelectedMovie(movie);
-
-        } catch (err) {
-            console.log('fetchMovieById ERROR:', err.message);
-            setSelectedMovie(null);
-        }
-    }
-
     function closeViewMovieDetails() {
         setSelectedId(null);
-        setSelectedMovie(null);
+    }
+
+    function handleSetWatched(movie) {
+        const exists = watched.some(item => item.imdbID === movie.imdbID);
+
+        if (exists) return;
+
+        setWatched([...watched, movie]);
     }
 
     useEffect(() => {
         fetchMovies();
     }, [searchInput])
-
-
-    useEffect(() => {
-        fetchMovieById();
-    }, [selectedId]);
 
     return (
         <div className="usePopcorn-app">
@@ -109,7 +83,13 @@ export default function App() {
                 <BoxColumn>
                     <MoviesWatched movies={watched}/>
                     <MoviesList movies={watched}/>
-                    {selectedMovie && <MovieDetails movie={selectedMovie} onCloseViewMovieDetails={closeViewMovieDetails}/>}
+                    {selectedId && 
+                        <MovieDetails
+                         selectedID={selectedId} 
+                         onCloseViewMovieDetails={closeViewMovieDetails}
+                         onSetWatched={handleSetWatched}
+                        />
+                    }
                 </BoxColumn>
             </Box>
         </div>
