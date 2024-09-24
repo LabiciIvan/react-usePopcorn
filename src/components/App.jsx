@@ -62,6 +62,7 @@ export default function App() {
         if (exists) return;
 
         setWatched([...watched, movie]);
+        closeViewMovieDetails();
     }
 
     useEffect(() => {
@@ -77,18 +78,25 @@ export default function App() {
             </NavigationBar>
             <Box>
                 <BoxColumn>
-                    { isLoading ? <StatusMessage message={'LOADING'} /> : <MoviesList movies={movies} onSetSelectedId={setSelectedId}/>}
+                    { isLoading ? 
+                        <StatusMessage message={'LOADING'} /> 
+                         :
+                        <MoviesList movies={movies} onSetSelectedId={setSelectedId}/>
+                    }
                     { error && <StatusMessage message={error}/> }
                 </BoxColumn>
                 <BoxColumn>
-                    <MoviesWatched movies={watched}/>
-                    <MoviesList movies={watched}/>
-                    {selectedId && 
+                    {selectedId ?
                         <MovieDetails
                          selectedID={selectedId} 
                          onCloseViewMovieDetails={closeViewMovieDetails}
                          onSetWatched={handleSetWatched}
                         />
+                         :
+                        <>
+                         <MoviesWatched movies={watched}/>
+                         <MoviesList movies={watched}/>
+                        </>
                     }
                 </BoxColumn>
             </Box>

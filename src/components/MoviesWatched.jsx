@@ -2,9 +2,9 @@ export default function MoviesWatched({movies}) {
 
     const moviesWatched = movies.length;
 
-    const moviesAverageIMDBRating = movies.reduce((prevRating, currentRating) => prevRating + Number(currentRating.imdbRating), 0) / moviesWatched;
+    const moviesAverageIMDBRating = movies.reduce((prevRating, currentRating) => prevRating + currentRating.imdbRating, 0) / moviesWatched;
 
-    const moviesAverageTime = movies.reduce((initialValue, movie) => initialValue + Number(movie.Runtime.split(" ").at(0)), 0) / moviesWatched;
+    const moviesAverageTime = movies.reduce((initialValue, movie) => initialValue + movie.runtime, 0) / moviesWatched;
 
     const moviesAverageUserRating = movies.reduce((initialValue, movie) => initialValue + movie.userRating, 0) / moviesWatched;
 

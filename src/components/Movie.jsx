@@ -5,11 +5,11 @@ export default function Movie({movie, onSetSelectedId = () => {console.log('Call
             <div className="details">
                 <h4>{movie.Title}</h4>
                 <div className="specifics">
-                    📅
-                    <p className="year">{movie.Year}</p>
-                    <p className="rating-imdb">8.8</p>
-                    <p className="rating-user">10</p>
-                    <p className="length">148 min</p>
+
+                    <p className="year">📅{movie.Year}</p>
+                    <p className="rating-imdb">{movie.imdbRating ? <>⭐{movie.imdbRating}</>  : ''}</p>
+                    <p className="rating-user">{movie.userRating ?  <>🌟{movie.userRating}</> : ''}</p>
+                    <p className="length">⌛ {movie.Year}</p>
                 </div>
             </div>
         </li>

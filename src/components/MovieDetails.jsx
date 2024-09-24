@@ -1,14 +1,15 @@
 import { useEffect, useState } from "react";
 import Button from "./Button";
 import StatusMessage from "./StatusMessage";
+import StarRating from "./StartRating";
 
 const API_KEY = atob('OGY1NDAzOA==');
 
 export default function MovieDetails({selectedID, onCloseViewMovieDetails, onSetWatched}) {
 
     const [movie, setMovie] = useState({});
-
     const [isLoading, setIsLoading] = useState(false);
+    const [userRating, setUserRating] = useState(0);
 
     const {
         Poster: image,
@@ -17,8 +18,25 @@ export default function MovieDetails({selectedID, onCloseViewMovieDetails, onSet
         Genre: genre,
         Actors: actors,
         Plot: description,
-        imdbID: id
+        imdbRating: imdbRating,
+        imdbID: id,
+        Year: year,
     } = movie;
+
+    function handleMovieCreation() {
+
+        const watchedMovie = {
+            Title: title,
+            imdbID: id,
+            imdbRating: Number(imdbRating),
+            runtime: Number(duration.split(" ").at(0)),
+            userRating: Number(userRating),
+            Year: year,
+            Poster: image,
+        };
+
+        onSetWatched(watchedMovie)
+    }
 
     async function fetchMovieById() {
         try {
@@ -73,9 +91,12 @@ export default function MovieDetails({selectedID, onCloseViewMovieDetails, onSet
                     <p>{description}</p>
                 </div>
                 <div className="row-3">
+                    <div className="star-rating">
+                        <StarRating size={33} maxRating={10} onSetUserRating={setUserRating}/>
+                    </div>
                     <Button
                     content="Watched 💜"
-                    onHandleClick={() => onSetWatched(movie)}
+                    onHandleClick={() => handleMovieCreation()}
                     />
                 </div>
             </>
