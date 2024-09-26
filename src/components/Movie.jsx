@@ -1,9 +1,21 @@
-export default function Movie({movie, onSetSelectedId = () => {console.log('Calling Movie prop funcion')}}) {
+import Button from "./Button"
+
+export default function Movie({movie, onSetSelectedId = (() => {console.log('Calling Movie prop funcion')}), onRemovingWatched = null}) {
     return (
         <li className="movie-item" onClick={() => onSetSelectedId(prev => movie.imdbID)}>
             <img src={movie.Poster} alt="Movie Image"/>
             <div className="details">
-                <h4>{movie.Title}</h4>
+                <div className="details-header-wrapper">
+                    <h4>{movie.Title}</h4>
+                    {onRemovingWatched &&
+                        <Button
+                         content="x"
+                         bgColor="#b61515"
+                         hoverColor="#f04a4a"
+                         onHandleClick={() => onRemovingWatched(movie)}
+                        />
+                    }
+                </div>
                 <div className="specifics">
 
                     <p className="year">📅{movie.Year}</p>

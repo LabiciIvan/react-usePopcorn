@@ -1,6 +1,6 @@
 import Movie from "./Movie";
 
-export default function  MoviesList({movies, onSetSelectedId}) {
+export default function  MoviesList({movies, onSetSelectedId, onRemovingWatched = null}) {
     return (movies &&
         <ul>
             { movies.map((movie, index) => 
@@ -8,6 +8,7 @@ export default function  MoviesList({movies, onSetSelectedId}) {
                     key={index}
                     movie={movie}
                     onSetSelectedId={onSetSelectedId}
+                    onRemovingWatched={onRemovingWatched}
                 />
             )}
         </ul>

@@ -65,9 +65,27 @@ export default function App() {
         closeViewMovieDetails();
     }
 
+    function handleRemoveWatched(movie) {
+        const updatedWatched = watched.filter((item) => item.imdbID !== movie.imdbID);
+
+        setWatched(updatedWatched);
+    }
+
     useEffect(() => {
         fetchMovies();
     }, [searchInput])
+
+    useEffect(() => {
+        if (!selectedId) {
+            document.title = 'Popcorn';
+            return;
+        }
+
+        const movieSelected = movies.filter(item => item.imdbID === selectedId).at(0);
+
+        document.title = movieSelected.Title;
+
+    }, [selectedId]);
 
     return (
         <div className="usePopcorn-app">
@@ -95,7 +113,7 @@ export default function App() {
                          :
                         <>
                          <MoviesWatched movies={watched}/>
-                         <MoviesList movies={watched}/>
+                         <MoviesList movies={watched} onRemovingWatched={handleRemoveWatched}/>
                         </>
                     }
                 </BoxColumn>
