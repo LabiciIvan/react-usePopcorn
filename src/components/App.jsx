@@ -72,7 +72,12 @@ export default function App() {
     }
 
     useEffect(() => {
-        fetchMovies();
+        const timer = setTimeout(() => {
+            fetchMovies();
+        }, 500);
+
+        return () => clearTimeout(timer);
+
     }, [searchInput])
 
     useEffect(() => {
@@ -86,6 +91,21 @@ export default function App() {
         document.title = movieSelected.Title;
 
     }, [selectedId]);
+
+    useEffect(function() {
+
+        const callback = function (e) {
+            if (e.code === 'Escape') {
+                closeViewMovieDetails();
+            }
+        }
+
+        document.addEventListener('keydown', callback);
+
+        return function() {
+            document.removeEventListener('keydown', callback);
+        }
+    }, []);
 
     return (
         <div className="usePopcorn-app">
