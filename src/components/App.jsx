@@ -16,10 +16,15 @@ const API_KEY = atob('OGY1NDAzOA==');
 export default function App() {
 
     const [movies, setMovies] = useState([]);
-    const [watched, setWatched] = useState([]);
     const [isLoading, setIsLoading] = useState(false);
     const [error, setError] =  useState("");
     const [searchInput, setSearchInput] = useState("");
+
+    const [watched, setWatched] = useState(() => {
+        const storedValue = localStorage.getItem('watched');
+
+        return (storedValue !== null ? JSON.parse(storedValue) : []);
+    });
 
     const [selectedId, setSelectedId] = useState(null);
 
@@ -106,6 +111,10 @@ export default function App() {
             document.removeEventListener('keydown', callback);
         }
     }, []);
+
+    useEffect(() => {
+        localStorage.setItem('watched', JSON.stringify(watched));
+    }, [watched]);
 
     return (
         <div className="usePopcorn-app">

@@ -8,7 +8,6 @@ export default function MoviesWatched({movies}) {
 
     const moviesAverageUserRating = movies.reduce((initialValue, movie) => initialValue + movie.userRating, 0) / moviesWatched;
 
-
     return (movies &&
         <div className="movies-watched">
             <h4>MOVIES YOU WATCHED</h4>
