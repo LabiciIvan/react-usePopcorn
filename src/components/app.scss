@@ -202,10 +202,10 @@ $app-bg: #202022;
 
     &.collapsed {
         height: 40px;
+        overflow: hidden;
     }
 
-    ul,
-    div {
+    ul {
         border-radius: 5px;
     }
 
@@ -241,10 +241,8 @@ $app-bg: #202022;
         }
 
         img {
-            height: 100%;
-            max-height: 90px;
-            width: 100%;
-            max-width: 60px;
+            height: 100px;
+            width: 80px;
         }
 
         .details {
@@ -254,9 +252,16 @@ $app-bg: #202022;
             max-height: 90px;
             width: 100%;
 
-            h4 {
-                font-size: 20px;
+            .details-header-wrapper {
+                display: flex;
+                flex-direction: row;
+                justify-content: space-between;
+
+                h4 {
+                    font-size: 20px;
+                }
             }
+
 
             .specifics {
                 font-size: 18px;
@@ -268,11 +273,10 @@ $app-bg: #202022;
 
 .movies-watched {
     background-color: $column-bg;
-    padding: 10px;
+    padding: 5px;
     justify-content: center;
-    border-top: 1px solid #717076;
     color: white;
-    box-shadow:  0px 8px 12px 5px rgba(44, 43, 61, 0.461);
+    box-shadow:  0px 8px 4px 6px rgba(57, 56, 91, 0.304);
     position: relative;
 
     .row {
@@ -281,6 +285,7 @@ $app-bg: #202022;
 }
 
 .movie-details {
+    border-top: 1px solid #717076;
     padding: 7px;
     .close-details {
         display: flex;
@@ -347,6 +352,18 @@ $app-bg: #202022;
             padding-top: 10px;
             font-weight: 300;
             line-height: 25px;
+        }
+    }
+
+    .row-3 {
+        display: flex;
+        flex-direction: column;
+
+        .star-rating {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            padding: 10px;
         }
     }
 

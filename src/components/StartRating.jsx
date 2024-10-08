@@ -17,12 +17,13 @@ StarRating.propTypes = {
     size: PropTypes.number
 }
 
-export default function StarRating({maxRating = 5, color = '#fcc419', size=48}) {
+export default function StarRating({maxRating = 5, color = '#fcc419', size=48, onSetUserRating}) {
     const [rating, setRating] = useState(0);
     const [hovering, setHovering] = useState(0);
 
     function handleRating(rating) {
         setRating(rating);
+        onSetUserRating(rating);
     }
 
     function handleHover(index) {
@@ -65,8 +66,8 @@ export default function StarRating({maxRating = 5, color = '#fcc419', size=48}) 
 
 function Star({onRate, full, onHover, onLeaveHover, hovered, color, size}) {
     const starStyle = {
-        width: '48px',
-        height: '48px',
+        width: '33px',
+        height: '33px',
         display: 'block',
         cursor: 'pointer',
         color,

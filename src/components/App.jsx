@@ -9,26 +9,24 @@ import SearchInput from "./SearchInput";
 import Box from './Box';
 import Logo from './Logo';
 import MovieDetails from './MovieDetails';
+import StatusMessage from './StatusMessage';
 
 const API_KEY = atob('OGY1NDAzOA==');
 
 export default function App() {
 
     const [movies, setMovies] = useState([]);
-    const [watched, setWatched] = useState([]);
     const [isLoading, setIsLoading] = useState(false);
     const [error, setError] =  useState("");
     const [searchInput, setSearchInput] = useState("");
 
+    const [watched, setWatched] = useState(() => {
+        const storedValue = localStorage.getItem('watched');
+
+        return (storedValue !== null ? JSON.parse(storedValue) : []);
+    });
+
     const [selectedId, setSelectedId] = useState(null);
-    const [selectedMovie, setSelectedMovie] = useState(null);
-
-
-    function StatusMessage({message}) {
-        return (
-            <div className='loading'>{message}</div>
-        )
-    }
 
     async function fetchMovies() {
 
@@ -59,40 +57,64 @@ export default function App() {
         }
     }
 
-    async function fetchMovieById() {
-        try {
-            if (selectedMovie && (selectedId === selectedMovie.imdbID)) return;
-
-            const response = await fetch(`https://www.omdbapi.com/?apikey=${API_KEY}&i=${selectedId}`);
-
-            const movie = await response.json();
-
-            if (movie.Response === "False") {
-                setSelectedMovie(null);
-                return;
-            }
-
-            setSelectedMovie(movie);
-
-        } catch (err) {
-            console.log('fetchMovieById ERROR:', err.message);
-            setSelectedMovie(null);
-        }
-    }
-
     function closeViewMovieDetails() {
         setSelectedId(null);
-        setSelectedMovie(null);
+    }
+
+    function handleSetWatched(movie) {
+        const exists = watched.some(item => item.imdbID === movie.imdbID);
+
+        if (exists) return;
+
+        setWatched([...watched, movie]);
+        closeViewMovieDetails();
+    }
+
+    function handleRemoveWatched(movie) {
+        const updatedWatched = watched.filter((item) => item.imdbID !== movie.imdbID);
+
+        setWatched(updatedWatched);
     }
 
     useEffect(() => {
-        fetchMovies();
+        const timer = setTimeout(() => {
+            fetchMovies();
+        }, 500);
+
+        return () => clearTimeout(timer);
+
     }, [searchInput])
 
+    useEffect(() => {
+        if (!selectedId) {
+            document.title = 'Popcorn';
+            return;
+        }
+
+        const movieSelected = movies.filter(item => item.imdbID === selectedId).at(0);
+
+        document.title = movieSelected.Title;
+
+    }, [selectedId]);
+
+    useEffect(function() {
+
+        const callback = function (e) {
+            if (e.code === 'Escape') {
+                closeViewMovieDetails();
+            }
+        }
+
+        document.addEventListener('keydown', callback);
+
+        return function() {
+            document.removeEventListener('keydown', callback);
+        }
+    }, []);
 
     useEffect(() => {
-        fetchMovieById();
-    }, [selectedId]);
+        localStorage.setItem('watched', JSON.stringify(watched));
+    }, [watched]);
 
     return (
         <div className="usePopcorn-app">
@@ -103,13 +125,26 @@ export default function App() {
             </NavigationBar>
             <Box>
                 <BoxColumn>
-                    { isLoading ? <StatusMessage message={'LOADING'} /> : <MoviesList movies={movies} onSetSelectedId={setSelectedId}/>}
+                    { isLoading ? 
+                        <StatusMessage message={'LOADING'} /> 
+                         :
+                        <MoviesList movies={movies} onSetSelectedId={setSelectedId}/>
+                    }
                     { error && <StatusMessage message={error}/> }
                 </BoxColumn>
                 <BoxColumn>
-                    <MoviesWatched movies={watched}/>
-                    <MoviesList movies={watched}/>
-                    {selectedMovie && <MovieDetails movie={selectedMovie} onCloseViewMovieDetails={closeViewMovieDetails}/>}
+                    {selectedId ?
+                        <MovieDetails
+                         selectedID={selectedId} 
+                         onCloseViewMovieDetails={closeViewMovieDetails}
+                         onSetWatched={handleSetWatched}
+                        />
+                         :
+                        <>
+                         <MoviesWatched movies={watched}/>
+                         <MoviesList movies={watched} onRemovingWatched={handleRemoveWatched}/>
+                        </>
+                    }
                 </BoxColumn>
             </Box>
         </div>
