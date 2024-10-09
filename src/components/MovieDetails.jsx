@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import Button from "./Button";
 import StatusMessage from "./StatusMessage";
 import StarRating from "./StartRating";
@@ -10,6 +10,13 @@ export default function MovieDetails({selectedID, onCloseViewMovieDetails, onSet
     const [movie, setMovie] = useState({});
     const [isLoading, setIsLoading] = useState(false);
     const [userRating, setUserRating] = useState(0);
+
+    const countRef = useRef(0);
+
+    useEffect(() => {
+        if (userRating) countRef.current = countRef.current + 1;
+        console.log('count ref', countRef);
+    }, [userRating])
 
     const {
         Poster: image,
@@ -33,6 +40,7 @@ export default function MovieDetails({selectedID, onCloseViewMovieDetails, onSet
             userRating: Number(userRating),
             Year: year,
             Poster: image,
+            countRatingDecisions: countRef.current,
         };
 
         onSetWatched(watchedMovie)
